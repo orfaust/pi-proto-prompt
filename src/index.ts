@@ -20,7 +20,21 @@ export class NotesEditor extends Editor {
     this.setText(initialText);
     this.onChange = () => saveDraft(this.getExpandedText());
     this.onSubmit = (text) => done(text);
+    let pasting = false;
     this.handleInput = (data: string) => {
+      // Paste payloads may arrive in chunks containing standalone Enter/Escape.
+      // Let the base editor buffer them before interpreting modal shortcuts.
+      if (pasting || data.includes("\x1b[200~")) {
+        pasting = !data.includes("\x1b[201~");
+        super.handleInput(data);
+        tui.requestRender();
+        return;
+      }
+      if (data.length > 1 && !data.startsWith("\x1b") && /[\r\n]/.test(data)) {
+        this.insertTextAtCursor(data);
+        tui.requestRender();
+        return;
+      }
       if (matchesKey(data, "escape")) done(undefined);
       else if (matchesKey(data, "shift+enter") || matchesKey(data, "ctrl+j") || data === "\n") this.insertTextAtCursor("\n");
       else if (matchesKey(data, "enter")) done(this.getExpandedText());
