@@ -15,9 +15,10 @@ Eseguire `/reload` nelle sessioni già aperte.
 - `Ctrl+K`: apre il riquadro modale centrato.
 - `Invio`: chiude e accoda le note al prompt corrente, separate da una nuova riga.
 - `Shift+Invio` (oppure `Ctrl+J`): nuova riga nelle note.
-- `Esc`: chiude e scarta le note, lasciando il prompt invariato.
+- `Esc`: chiude senza modificare il prompt, conservando le note alla riapertura.
 - `/proto-prompt`: apertura alternativa senza hotkey.
 
+Le note restano in memoria alla riapertura, anche dopo Invio; vengono perse con `/reload` o al riavvio di Pi. Confermare nuovamente accoda nuovamente le note.
 Le note vuote o di soli spazi vengono ignorate. Nessuna nota viene salvata su disco.
 Disponibile nella TUI interattiva, non in modalità RPC/print.
 
@@ -35,10 +36,21 @@ Per esempio, usare `"ctrl+alt+n"` per cambiare combinazione in tutti i progetti.
 Applicare con `/reload`. In assenza di configurazione il valore è `ctrl+k`;
 configurazioni non valide producono un avviso e ripristinano il default.
 
-**Conflitto:** `Ctrl+K` sostituisce il comando standard di eliminazione fino a fine riga.
-Pi può segnalare il conflitto: è previsto. Le hotkey riservate da Pi non sono
-sovrascrivibili; anche sistema operativo, terminale o altre estensioni possono
-intercettare una combinazione. Verificare con `/hotkeys` e scegliere una combinazione libera.
+**Importante:** Pi riserva `Ctrl+K` all'azione `tui.editor.deleteToLineEnd` e
+rifiuta la shortcut dell'estensione finché quel binding è attivo.
+Per usare il default, aggiungere questa proprietà alla configurazione globale
+`~/.pi/agent/keybindings.json`, conservando le altre proprietà:
+
+```json
+{
+  "tui.editor.deleteToLineEnd": "ctrl+alt+k"
+}
+```
+
+Eseguire `/reload`: `Ctrl+K` apre le note e `Ctrl+Alt+K` elimina fino a fine riga.
+In alternativa configurare l'estensione con una combinazione libera, come `ctrl+alt+n`.
+Anche sistema operativo, terminale o altre estensioni possono intercettare una
+combinazione. Verificare con `/hotkeys`.
 La configurazione è globale e non legge override di progetto.
 
 ## Sviluppo
