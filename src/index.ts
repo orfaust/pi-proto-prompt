@@ -35,15 +35,14 @@ export class NotesEditor extends Editor {
     const border = (text: string) => this.colors.fg("accent", text);
     const row = (text: string) => {
       const content = truncateToWidth(text, innerWidth);
-      return border("|") + content + " ".repeat(Math.max(0, innerWidth - visibleWidth(content))) + border("|");
+      return border("│") + content + " ".repeat(Math.max(0, innerWidth - visibleWidth(content))) + border("│");
     };
-    const edge = border("+" + "-".repeat(innerWidth) + "+");
     return [
-      edge,
-      row(this.colors.fg("accent", " Note · Proto Prompt")),
+      border("┌" + "─".repeat(innerWidth) + "┐"),
+      row(this.colors.fg("accent", " Notes · Proto Prompt")),
       ...super.render(innerWidth).slice(1, -1).map(row),
-      row(this.colors.fg("muted", " Invio: accoda · Shift+Invio: nuova riga · Esc: chiudi")),
-      edge,
+      row(this.colors.fg("muted", " Enter: transfer · Shift+Enter: new line · Esc: keep draft")),
+      border("└" + "─".repeat(innerWidth) + "┘"),
     ];
   }
 }
@@ -68,24 +67,34 @@ export default function (pi: ExtensionAPI) {
   async function showNotes(ctx: ExtensionContext) {
     if (ctx.mode !== "tui" || open) return;
     open = true;
+    let modalTui: TUI | undefined;
+    const prompt = ctx.ui.getEditorText();
+    draft = appendNotes(draft, prompt);
+    ctx.ui.setEditorText("");
     try {
       const notes = await ctx.ui.custom<string | undefined>(
-        (tui, theme, _keys, done) => new NotesEditor(tui, theme, done, draft, (text) => { draft = text; }),
+        (tui, theme, _keys, done) => {
+          modalTui = tui;
+          return new NotesEditor(tui, theme, done, draft, (text) => { draft = text; });
+        },
         { overlay: true, overlayOptions: { anchor: "center", width: "80%", maxHeight: "70%" } },
       );
-      if (notes !== undefined && notes.trim()) {
+      if (notes !== undefined) {
         ctx.ui.setEditorText(appendNotes(ctx.ui.getEditorText(), notes));
+        draft = "";
       }
     } finally {
       open = false;
+      // setEditorText does not schedule a render after the overlay promise resolves.
+      modalTui?.requestRender();
     }
   }
   pi.registerShortcut(shortcut as KeyId, {
-    description: "Proto Prompt: apri note da accodare al prompt",
+    description: "Proto Prompt: open notes editor",
     handler: showNotes,
   });
   pi.registerCommand("proto-prompt", {
-    description: "Apri le note da accodare al prompt",
+    description: "Open notes editor and import the current prompt",
     handler: async (_args, ctx) => showNotes(ctx),
   });
 }

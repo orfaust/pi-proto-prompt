@@ -44,7 +44,7 @@ test("Ctrl+J inserts newline rather than confirming", () => {
   assert.equal(editor.getText(), "prima\n");
 });
 
-test("draft survives close and reopening, including confirmation", () => {
+test("editor preserves draft on Escape and returns it on confirmation", () => {
   let draft = "";
   const editor = new NotesEditor(tui, theme, () => {}, "", (text) => { draft = text; });
   editor.handleInput("a");
@@ -65,11 +65,11 @@ test("render remains within narrow terminal widths", () => {
   editor.setText("日本語 emoji 🎉 e una nota abbastanza lunga");
   for (const width of [10, 20, 40, 80]) {
     const lines = editor.render(width);
-    assert.equal(lines[0], "+" + "-".repeat(width - 2) + "+");
-    assert.equal(lines.at(-1), lines[0]);
+    assert.equal(lines[0], "┌" + "─".repeat(width - 2) + "┐");
+    assert.equal(lines.at(-1), "└" + "─".repeat(width - 2) + "┘");
     for (const line of lines) {
       assert.ok(visibleWidth(line) <= width);
-      assert.ok(line.startsWith("+") || (line.startsWith("|") && line.endsWith("|")));
+      assert.ok(line.startsWith("┌") || line.startsWith("└") || (line.startsWith("│") && line.endsWith("│")));
     }
   }
 });
