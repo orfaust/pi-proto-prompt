@@ -2,6 +2,22 @@
 
 A modal notes editor for Pi. Move text between a scratch draft and the prompt without sending it to the model.
 
+## Demo
+
+[Watch the 23-second English demo](docs/proto-prompt-demo.mp4).
+
+The video renders actual `NotesEditor` component states with automated keyboard
+input and sample clipboard text. It is not a desktop recording and makes no model
+requests. It demonstrates opening, editing, retaining a draft, clearing, pasting,
+and transferring text.
+
+To regenerate it (requires Python with Pillow and ffmpeg):
+
+```sh
+npx tsx scripts/demo-frames.ts
+python scripts/render-demo.py
+```
+
 ## Global installation
 
 ```sh
