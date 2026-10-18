@@ -16,6 +16,7 @@ Run `/reload` in existing sessions after installation or updates.
 - Opening moves the current prompt to the end of the modal draft and clears the prompt.
 - `Enter`: close the modal, transfer its contents to the prompt immediately, and clear the draft. This does **not** send a message to the model.
 - `Shift+Enter` (or `Ctrl+J`): insert a new line.
+- Paste protection: in legacy terminals without bracketed paste, Enter within 200 ms of typing is treated as a newline. Pause briefly after typing/pasting before pressing Enter to transfer. This is a timing safeguard, not perfect paste detection; bracketed paste is recommended.
 - `Esc`: close and keep the draft for later. Imported prompt text remains in the draft, not in the main prompt.
 - `/proto-prompt`: open the modal without a keyboard shortcut.
 

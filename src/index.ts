@@ -21,6 +21,8 @@ export class NotesEditor extends Editor {
     this.onChange = () => saveDraft(this.getExpandedText());
     this.onSubmit = (text) => done(text);
     let pasting = false;
+    let lastTextInput = -Infinity;
+    const pasteQuietMs = 200;
     this.handleInput = (data: string) => {
       // Paste payloads may arrive in chunks containing standalone Enter/Escape.
       // Let the base editor buffer them before interpreting modal shortcuts.
@@ -32,13 +34,24 @@ export class NotesEditor extends Editor {
       }
       if (data.length > 1 && !data.startsWith("\x1b") && /[\r\n]/.test(data)) {
         this.insertTextAtCursor(data);
+        lastTextInput = Date.now();
         tui.requestRender();
         return;
       }
       if (matchesKey(data, "escape")) done(undefined);
       else if (matchesKey(data, "shift+enter") || matchesKey(data, "ctrl+j") || data === "\n") this.insertTextAtCursor("\n");
-      else if (matchesKey(data, "enter")) done(this.getExpandedText());
-      else super.handleInput(data);
+      else if (matchesKey(data, "enter")) {
+        // Legacy terminals may emit an unbracketed paste as individual keys.
+        // Never close during a text burst: its remaining lines would reach the
+        // main prompt and could submit a model request.
+        if (Date.now() - lastTextInput < pasteQuietMs) {
+          this.insertTextAtCursor("\n");
+          lastTextInput = Date.now();
+        } else done(this.getExpandedText());
+      } else {
+        super.handleInput(data);
+        if (!data.startsWith("\x1b") && data.length > 0) lastTextInput = Date.now();
+      }
       tui.requestRender();
     };
   }
