@@ -40,7 +40,9 @@ export class NotesEditor extends Editor {
     return [
       border("┌" + "─".repeat(innerWidth) + "┐"),
       row(this.colors.fg("accent", " Notes · Proto Prompt")),
-      ...super.render(innerWidth).slice(1, -1).map(row),
+      row(""),
+      ...super.render(Math.max(1, innerWidth - 2)).slice(1, -1).map((line) => row(" " + line + " ")),
+      row(""),
       row(this.colors.fg("muted", " Enter: transfer · Shift+Enter: new line · Esc: keep draft")),
       border("└" + "─".repeat(innerWidth) + "┘"),
     ];
