@@ -98,7 +98,7 @@ export class NotesEditor extends Editor {
     };
     return [
       border("┌" + "─".repeat(innerWidth) + "┐"),
-      row(this.colors.fg("accent", " Notes · Proto Prompt")),
+      row(this.colors.fg("accent", " Proto Prompt")),
       row(""),
       ...super.render(Math.max(1, innerWidth - 2)).slice(1, -1).map((line) => row(" " + line + " ")),
       row(""),
