@@ -3,11 +3,11 @@ import { join } from "node:path";
 import { getAgentDir, type ExtensionAPI, type ExtensionContext, type Theme } from "@earendil-works/pi-coding-agent";
 import { Editor, matchesKey, truncateToWidth, visibleWidth, type KeyId, type TUI } from "@earendil-works/pi-tui";
 import { appendNotes, readShortcut } from "./core.js";
-import { readClipboardText } from "./clipboard.js";
+import { readClipboardContent } from "./clipboard.js";
 
 export class NotesEditor extends Editor {
   private clipboardStatus = "";
-  constructor(tui: TUI, private colors: Theme, done: (value: string | undefined) => void, initialText = "", saveDraft: (text: string) => void = () => {}, readClipboard: () => Promise<string> = readClipboardText) {
+  constructor(tui: TUI, private colors: Theme, done: (value: string | undefined) => void, initialText = "", saveDraft: (text: string) => void = () => {}, readClipboard: () => Promise<string> = readClipboardContent) {
     const muted = (text: string) => colors.fg("muted", text);
     super(tui, {
       borderColor: (text) => colors.fg("accent", text),

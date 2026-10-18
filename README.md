@@ -18,7 +18,9 @@ Run `/reload` in existing sessions after installation or updates.
 - `Shift+Enter` (or `Ctrl+J`): insert a new line.
 - Paste protection: in legacy terminals without bracketed paste, Enter within 200 ms of typing is treated as a newline. Pause briefly after typing/pasting before pressing Enter to transfer. This is a timing safeguard, not perfect paste detection; bracketed paste is recommended.
 - `Ctrl+C` inside the modal: clear all text, including the saved draft, without closing.
-- `Alt+V` inside the modal: paste plain text from the system clipboard at the cursor, including multiple lines, without confirming. Requires local clipboard access; errors appear in the modal. Clipboard reads are discarded if you clear or close the modal before they finish.
+- `Alt+V` inside the modal: paste copied file paths, an image path, or plain text at the cursor without confirming. Screenshots are saved as temporary image files; existing copied files keep their original paths. Paths are quoted to support spaces. Clipboard reads are discarded if you clear or close the modal before they finish. Requires local clipboard access; errors appear in the modal.
+
+Clipboard image access uses Pi's native backend, with a PowerShell fallback on Windows/WSL. Saved images remain in the OS temporary directory so paths stay valid after transfer; the extension does not delete them automatically. Pasting a path does not itself attach an image or send it to the model.
 - `Esc`: close and keep the draft for later. Imported prompt text remains in the draft, not in the main prompt.
 - `/proto-prompt`: open the modal without a keyboard shortcut.
 
