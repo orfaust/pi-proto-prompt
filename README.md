@@ -12,7 +12,7 @@ Eseguire `/reload` nelle sessioni già aperte.
 
 ## Uso
 
-- `Ctrl+K`: apre il riquadro modale centrato.
+- `Ctrl+Invio`: apre il riquadro modale centrato.
 - `Invio`: chiude e accoda le note al prompt corrente, separate da una nuova riga.
 - `Shift+Invio` (oppure `Ctrl+J`): nuova riga nelle note.
 - `Esc`: chiude senza modificare il prompt, conservando le note alla riapertura.
@@ -28,27 +28,20 @@ Creare `pi-proto-prompt.json` nella directory utente di Pi (normalmente `~/.pi/a
 
 ```json
 {
-  "shortcut": "ctrl+k"
+  "shortcut": "ctrl+enter"
 }
 ```
 
 Per esempio, usare `"ctrl+alt+n"` per cambiare combinazione in tutti i progetti.
-Applicare con `/reload`. In assenza di configurazione il valore è `ctrl+k`;
+Applicare con `/reload`. In assenza di configurazione il valore è `ctrl+enter`;
 configurazioni non valide producono un avviso e ripristinano il default.
 
-**Importante:** Pi riserva `Ctrl+K` all'azione `tui.editor.deleteToLineEnd` e
-rifiuta la shortcut dell'estensione finché quel binding è attivo.
-Per usare il default, aggiungere questa proprietà alla configurazione globale
-`~/.pi/agent/keybindings.json`, conservando le altre proprietà:
+Il terminale deve distinguere `Ctrl+Invio` da `Invio` (ad esempio tramite il
+protocollo tastiera Kitty). Se non lo supporta, configurare una combinazione
+alternativa come `ctrl+alt+n`, oppure usare `/proto-prompt`.
 
-```json
-{
-  "tui.editor.deleteToLineEnd": "ctrl+alt+k"
-}
-```
-
-Eseguire `/reload`: `Ctrl+K` apre le note e `Ctrl+Alt+K` elimina fino a fine riga.
-In alternativa configurare l'estensione con una combinazione libera, come `ctrl+alt+n`.
+Pi blocca le shortcut riservate: ad esempio `Ctrl+K` è assegnato a
+`tui.editor.deleteToLineEnd` e richiede una rimappatura prima di poterlo usare.
 Anche sistema operativo, terminale o altre estensioni possono intercettare una
 combinazione. Verificare con `/hotkeys`.
 La configurazione è globale e non legge override di progetto.

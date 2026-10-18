@@ -16,7 +16,7 @@ test("append preserves prompt and separates notes without trimming content", () 
 });
 
 test("global shortcut defaults and validates configuration", () => {
-  assert.equal(readShortcut({}), "ctrl+k");
+  assert.equal(readShortcut({}), "ctrl+enter");
   assert.equal(readShortcut({ shortcut: "ctrl+alt+n" }), "ctrl+alt+n");
   for (const config of [null, [], { shortcut: 42 }, { shortcut: "not-a-key" }]) {
     assert.throws(() => readShortcut(config));
