@@ -3,9 +3,11 @@ import { join } from "node:path";
 import { getAgentDir, type ExtensionAPI, type ExtensionContext, type Theme } from "@earendil-works/pi-coding-agent";
 import { Editor, matchesKey, truncateToWidth, visibleWidth, type KeyId, type TUI } from "@earendil-works/pi-tui";
 import { appendNotes, readShortcut } from "./core.js";
+import { readClipboardText } from "./clipboard.js";
 
 export class NotesEditor extends Editor {
-  constructor(tui: TUI, private colors: Theme, done: (value: string | undefined) => void, initialText = "", saveDraft: (text: string) => void = () => {}) {
+  private clipboardStatus = "";
+  constructor(tui: TUI, private colors: Theme, done: (value: string | undefined) => void, initialText = "", saveDraft: (text: string) => void = () => {}, readClipboard: () => Promise<string> = readClipboardText) {
     const muted = (text: string) => colors.fg("muted", text);
     super(tui, {
       borderColor: (text) => colors.fg("accent", text),
@@ -19,7 +21,15 @@ export class NotesEditor extends Editor {
     });
     this.setText(initialText);
     this.onChange = () => saveDraft(this.getExpandedText());
-    this.onSubmit = (text) => done(text);
+    let closed = false;
+    let clipboardVersion = 0;
+    let readingClipboard = false;
+    const finish = (text: string | undefined) => {
+      closed = true;
+      clipboardVersion++;
+      done(text);
+    };
+    this.onSubmit = finish;
     let pasting = false;
     let lastTextInput = -Infinity;
     const pasteQuietMs = 200;
@@ -38,7 +48,29 @@ export class NotesEditor extends Editor {
         tui.requestRender();
         return;
       }
-      if (matchesKey(data, "escape")) done(undefined);
+      if (matchesKey(data, "ctrl+c")) {
+        clipboardVersion++;
+        this.setText("");
+        saveDraft("");
+        this.clipboardStatus = "";
+        lastTextInput = -Infinity;
+      } else if (matchesKey(data, "alt+v")) {
+        if (readingClipboard) return;
+        readingClipboard = true;
+        const version = ++clipboardVersion;
+        this.clipboardStatus = "Reading clipboard…";
+        void readClipboard().then((text) => {
+          if (closed || version !== clipboardVersion) return;
+          this.insertTextAtCursor(text);
+          this.clipboardStatus = "";
+          lastTextInput = Date.now();
+        }).catch((error: unknown) => {
+          if (!closed && version === clipboardVersion) this.clipboardStatus = String(error);
+        }).finally(() => {
+          readingClipboard = false;
+          if (!closed) tui.requestRender();
+        });
+      } else if (matchesKey(data, "escape")) finish(undefined);
       else if (matchesKey(data, "shift+enter") || matchesKey(data, "ctrl+j") || data === "\n") this.insertTextAtCursor("\n");
       else if (matchesKey(data, "enter")) {
         // Legacy terminals may emit an unbracketed paste as individual keys.
@@ -47,7 +79,7 @@ export class NotesEditor extends Editor {
         if (Date.now() - lastTextInput < pasteQuietMs) {
           this.insertTextAtCursor("\n");
           lastTextInput = Date.now();
-        } else done(this.getExpandedText());
+        } else if (!readingClipboard) finish(this.getExpandedText());
       } else {
         super.handleInput(data);
         if (!data.startsWith("\x1b") && data.length > 0) lastTextInput = Date.now();
@@ -71,6 +103,7 @@ export class NotesEditor extends Editor {
       ...super.render(Math.max(1, innerWidth - 2)).slice(1, -1).map((line) => row(" " + line + " ")),
       row(""),
       row(this.colors.fg("muted", " Enter: transfer · Shift+Enter: new line · Esc: keep draft")),
+      row(this.colors.fg("muted", this.clipboardStatus || " Ctrl+C: clear all · Alt+V: paste")),
       border("└" + "─".repeat(innerWidth) + "┘"),
     ];
   }
