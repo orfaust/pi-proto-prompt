@@ -17,7 +17,7 @@ const clipboardText = "Include unit tests.\nKeep the implementation simple.";
 function capture(caption: string, seconds = 2) {
   const lines = ["PI  /  EXTENSION DEMO", "", "Prompt", prompt || "(empty)", ""];
   if (editor) lines.push(...editor.render(90));
-  else lines.push("Press Ctrl+Enter to open Proto Prompt.");
+  else lines.push("Press Ctrl+Alt+P to open Proto Prompt.");
   frames.push({ caption, seconds, lines: lines.map((line) => stripVTControlCharacters(line.replace(/\x1b_pi:[^\x07]*\x07/g, ""))) });
 }
 function open() {
@@ -35,14 +35,14 @@ function type(text: string) {
 
 capture("Start with an existing prompt.", 2);
 open();
-capture("Ctrl+Enter  |  Move the current prompt into Proto Prompt.", 3);
+capture("Ctrl+Alt+P  |  Move the current prompt into Proto Prompt.", 3);
 editor!.handleInput("\n");
 type("Use TypeScript and add a short README.");
 capture("Write notes. Use Shift+Enter or Ctrl+J for a new line.", 3);
 editor!.handleInput("\x1b");
 capture("Esc  |  Close the modal and keep the draft.", 2);
 open();
-capture("Ctrl+Enter  |  Reopen the saved draft.", 2);
+capture("Ctrl+Alt+P  |  Reopen the saved draft.", 2);
 editor!.handleInput("\x03");
 capture("Ctrl+C  |  Clear all text without closing the modal.", 2);
 editor!.handleInput("\x1bv");

@@ -111,13 +111,13 @@ export class NotesEditor extends Editor {
 
 export default function (pi: ExtensionAPI) {
   const configPath = join(getAgentDir(), "pi-proto-prompt.json");
-  let shortcut = "ctrl+enter";
+  let shortcut = "ctrl+alt+p";
   let configError: string | undefined;
   try {
     shortcut = readShortcut(JSON.parse(readFileSync(configPath, "utf8")));
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "ENOENT") {
-      configError = `Proto Prompt: ${configPath}: ${String(error)}. Using ctrl+enter.`;
+      configError = `Proto Prompt: ${configPath}: ${String(error)}. Using ctrl+alt+p.`;
     }
   }
   pi.on("session_start", async (_event, ctx) => {

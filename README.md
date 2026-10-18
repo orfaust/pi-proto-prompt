@@ -28,7 +28,7 @@ Run `/reload` in existing sessions after installation or updates.
 
 ## Usage
 
-- `Ctrl+Enter`: open the centered modal with a continuous box-drawing frame.
+- `Ctrl+Alt+P`: open the centered modal with a continuous box-drawing frame.
 - Opening moves the current prompt to the end of the modal draft and clears the prompt.
 - `Enter`: close the modal, transfer its contents to the prompt immediately, and clear the draft. This does **not** send a message to the model.
 - `Shift+Enter` (or `Ctrl+J`): insert a new line.
@@ -49,16 +49,20 @@ Create `pi-proto-prompt.json` in Pi's user directory (normally `~/.pi/agent`, or
 
 ```json
 {
-  "shortcut": "ctrl+enter"
+  "shortcut": "ctrl+alt+p"
 }
 ```
 
 For example, use `"ctrl+alt+n"` to change the shortcut for all projects.
-Run `/reload` to apply changes. The default is `ctrl+enter`; invalid configuration
+Run `/reload` to apply changes. The default is `ctrl+alt+p`; invalid configuration
 produces a warning and falls back to the default. Project overrides are not read.
 
-The terminal must distinguish `Ctrl+Enter` from `Enter`, for example through the
-Kitty keyboard protocol. Otherwise choose another shortcut or use `/proto-prompt`.
+Existing user configuration takes precedence over the default; update or remove
+its `shortcut` entry to adopt `ctrl+alt+p`. If your terminal intercepts the
+combination, choose another shortcut or use `/proto-prompt`. Custom combinations
+such as `Ctrl+Enter` require a terminal that distinguishes them from `Enter`.
+
+The demo video was recorded with the previous `Ctrl+Enter` default.
 
 Pi rejects reserved shortcuts: `Ctrl+K`, for example, belongs to
 `tui.editor.deleteToLineEnd` and must be remapped in Pi's global keybindings before
