@@ -12,7 +12,7 @@ answer an urgent agent request, and restore the draft when ready.
 ## Global installation
 
 ```sh
-pi install git:github.com/orfaust/pi-proto-prompt
+pi install npm:pi-proto-prompt
 ```
 
 Run `/reload` in existing sessions after installation or updates.
