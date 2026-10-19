@@ -4,9 +4,7 @@ A modal notes editor for Pi. Move text between a scratch draft and the prompt wi
 
 ## Demo
 
-[![Watch the Proto Prompt demo](docs/proto-prompt-preview.jpg)](https://github.com/orfaust/pi-proto-prompt/raw/refs/heads/main/docs/proto-prompt-annotated.mp4)
-
-[Watch the 51-second demo with English captions](https://github.com/orfaust/pi-proto-prompt/raw/refs/heads/main/docs/proto-prompt-annotated.mp4).
+https://github.com/user-attachments/assets/e6423cde-99da-439b-ad4c-3bf7869d303b
 
 The screen recording shows how to save an unfinished prompt in Proto Prompt,
 answer an urgent agent request, and restore the draft when ready.
