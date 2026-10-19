@@ -53,8 +53,6 @@ its `shortcut` entry to adopt `ctrl+alt+p`. If your terminal intercepts the
 combination, choose another shortcut or use `/proto-prompt`. Custom combinations
 such as `Ctrl+Enter` require a terminal that distinguishes them from `Enter`.
 
-The generated component demo was recorded with the previous `Ctrl+Enter` default.
-
 Pi rejects reserved shortcuts: `Ctrl+K`, for example, belongs to
 `tui.editor.deleteToLineEnd` and must be remapped in Pi's global keybindings before
 an extension can use it. The OS, terminal, or other extensions may also intercept
