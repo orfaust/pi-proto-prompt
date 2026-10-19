@@ -4,14 +4,15 @@ A modal notes editor for Pi. Move text between a scratch draft and the prompt wi
 
 ## Demo
 
-[Watch the 23-second English demo](docs/proto-prompt-demo.mp4).
+[![Watch the Proto Prompt demo](docs/proto-prompt-preview.jpg)](https://github.com/orfaust/pi-proto-prompt/raw/refs/heads/main/docs/proto-prompt-annotated.mp4)
 
-The video renders actual `NotesEditor` component states with automated keyboard
-input and sample clipboard text. It is not a desktop recording and makes no model
-requests. It demonstrates opening, editing, retaining a draft, clearing, pasting,
-and transferring text.
+[Watch the 51-second demo with English captions](https://github.com/orfaust/pi-proto-prompt/raw/refs/heads/main/docs/proto-prompt-annotated.mp4).
 
-To regenerate it (requires Python with Pillow and ffmpeg):
+The screen recording shows how to save an unfinished prompt in Proto Prompt,
+answer an urgent agent request, and restore the draft when ready.
+
+The repository also includes a separate generated component demo. To regenerate
+that demo (requires Python with Pillow and ffmpeg):
 
 ```sh
 npx tsx scripts/demo-frames.ts
@@ -62,7 +63,7 @@ its `shortcut` entry to adopt `ctrl+alt+p`. If your terminal intercepts the
 combination, choose another shortcut or use `/proto-prompt`. Custom combinations
 such as `Ctrl+Enter` require a terminal that distinguishes them from `Enter`.
 
-The demo video was recorded with the previous `Ctrl+Enter` default.
+The generated component demo was recorded with the previous `Ctrl+Enter` default.
 
 Pi rejects reserved shortcuts: `Ctrl+K`, for example, belongs to
 `tui.editor.deleteToLineEnd` and must be remapped in Pi's global keybindings before
