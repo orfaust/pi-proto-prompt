@@ -48,10 +48,8 @@ For example, use `"ctrl+alt+n"` to change the shortcut for all projects.
 Run `/reload` to apply changes. The default is `ctrl+alt+p`; invalid configuration
 produces a warning and falls back to the default. Project overrides are not read.
 
-Existing user configuration takes precedence over the default; update or remove
-its `shortcut` entry to adopt `ctrl+alt+p`. If your terminal intercepts the
-combination, choose another shortcut or use `/proto-prompt`. Custom combinations
-such as `Ctrl+Enter` require a terminal that distinguishes them from `Enter`.
+User configuration takes precedence over the default. If your terminal intercepts
+the configured combination, choose another shortcut or use `/proto-prompt`.
 
 Pi rejects reserved shortcuts: `Ctrl+K`, for example, belongs to
 `tui.editor.deleteToLineEnd` and must be remapped in Pi's global keybindings before
@@ -69,5 +67,5 @@ pi -e .
 
 Manual checks: import an existing prompt, edit multiline notes, press Enter, and
 verify the prompt appears immediately without submitting. Reopen to verify the
-previous draft was cleared. Test Escape retention, Unicode, narrow terminals,
+draft was cleared. Test Escape retention, Unicode, narrow terminals,
 resizing, focus, and both regular and fullscreen modes.
