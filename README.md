@@ -9,14 +9,6 @@ https://github.com/user-attachments/assets/e6423cde-99da-439b-ad4c-3bf7869d303b
 The screen recording shows how to save an unfinished prompt in Proto Prompt,
 answer an urgent agent request, and restore the draft when ready.
 
-The repository also includes a separate generated component demo. To regenerate
-that demo (requires Python with Pillow and ffmpeg):
-
-```sh
-npx tsx scripts/demo-frames.ts
-python scripts/render-demo.py
-```
-
 ## Global installation
 
 ```sh
