@@ -2,13 +2,6 @@
 
 A modal notes editor for Pi. Move text between a scratch draft and the prompt without sending it to the model.
 
-## Demo
-
-https://github.com/user-attachments/assets/e6423cde-99da-439b-ad4c-3bf7869d303b
-
-The screen recording shows how to save an unfinished prompt in Proto Prompt,
-answer an urgent agent request, and restore the draft when ready.
-
 ## Global installation
 
 ```sh
