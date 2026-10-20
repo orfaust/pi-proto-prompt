@@ -2,6 +2,19 @@
 
 A modal notes editor for Pi. Move text between a scratch draft and the prompt without sending it to the model.
 
+## Why?
+
+While the agent is working, you have an idea and start drafting your next prompt.
+Then the agent finishes and asks a question. You want to answer right away, but
+your unfinished draft is still in the prompt editor.
+
+You could move it to an external editor, but that adds friction and breaks your
+flow. The same problem arises when you want to run a slash command halfway
+through writing a prompt.
+
+Proto Prompt lets you move your draft into a temporary editor, freeing the prompt
+for a reply or command. Restore your draft whenever you're ready.
+
 ## Global installation
 
 ```sh
